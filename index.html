@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Dream Space — Managed IT Services, CCTV, Networking, POS Solutions and more for businesses in Lagos, Nigeria.">
+<title>Dream Space — Managed IT Services | Lagos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css">
+<!-- EmailJS SDK (defer loading to prevent blocking rendering) -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
+<!-- Vercel Analytics -->
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<!-- EMAILJS SETUP NOTICE -->
+<div id="setup-notice" style="display:none;">
+  <span>⚙️</span>
+  <span><strong>Setup required:</strong> To enable automatic emails, <a href="javascript:void(0)" onclick="showSetupGuide()">follow the 3-step EmailJS setup guide</a> and replace the keys in `script.js`. Until then, bookings will fall back to WhatsApp + mailto.</span>
+  <span class="dismiss" onclick="this.parentElement.style.display='none'">✕</span>
+</div>
+
+<!-- EMAILJS SETUP MODAL -->
+<div id="setupModal"
+  style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);z-index:10000;align-items:center;justify-content:center;padding:1rem">
+  <div
+    style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;max-width:560px;width:100%;max-height:90vh;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+      <div style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800">EmailJS Setup Guide</div><button
+        onclick="document.getElementById('setupModal').style.display='none'"
+        style="background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1.2rem">✕</button>
+    </div>
+    <div style="font-size:.83rem;color:var(--muted);line-height:1.8;display:flex;flex-direction:column;gap:1.2rem">
+      <div style="background:var(--card);border-radius:var(--radius-sm);padding:1rem;border:1px solid var(--border)">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);margin-bottom:.5rem">Step 1 — Create a free EmailJS account</div>Go to <strong style="color:var(--text)">emailjs.com</strong> → Sign Up (free plan allows 200 emails/month) → Dashboard
+      </div>
+      <div style="background:var(--card);border-radius:var(--radius-sm);padding:1rem;border:1px solid var(--border)">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);margin-bottom:.5rem">Step 2 — Connect your email &amp; create templates</div><strong style="color:var(--text)">Email Services</strong> → Add New Service → Gmail or Outlook (use <strong style="color:var(--text)">emmanuel.tar@outlook.com</strong>)<br><br><strong style="color:var(--text)">Email Templates</strong> → Create 2 templates:<br>• <strong style="color:var(--text)">Template 1</strong> (Company alert) — name it <code style="background:var(--deep);padding:.1rem .4rem;border-radius:4px;color:var(--accent)">ds_company_alert</code><br>• <strong style="color:var(--text)">Template 2</strong> (Customer confirmation) — name it <code style="background:var(--deep);padding:.1rem .4rem;border-radius:4px;color:var(--accent)">ds_customer_confirm</code><br><br>Template variables available: <code style="background:var(--deep);padding:.1rem .4rem;border-radius:4px;color:var(--gold)">{{booking_ref}}</code> <code style="background:var(--deep);padding:.1rem .4rem;border-radius:4px;color:var(--gold)">{{client_name}}</code> <code style="background:var(--deep);padding:.1rem .4rem;border-radius:4px;color:var(--gold)">{{client_email}}</code> <code style="background:var(--deep);padding:.1rem .4rem;border-radius:4px;color:var(--gold)">{{client_phone}}</code> <code style="background:var(--deep);padding:.1rem .4rem;border-radius:4px;color:var(--gold)">{{service}}</code> <code style="background:var(--deep);padding:.1rem .4rem;border-radius:4px;color:var(--gold)">{{date}}</code> <code style="background:var(--deep);padding:.1rem .4rem;border-radius:4px;color:var(--gold)">{{time}}</code> <code style="background:var(--deep);padding:.1rem .4rem;border-radius:4px;color:var(--gold)">{{priority}}</code> <code style="background:var(--deep);padding:.1rem .4rem;border-radius:4px;color:var(--gold)">{{location}}</code> <code style="background:var(--deep);padding:.1rem .4rem;border-radius:4px;color:var(--gold)">{{description}}</code> <code style="background:var(--deep);padding:.1rem .4rem;border-radius:4px;color:var(--gold)">{{company}}</code>
+      </div>
+      <div style="background:var(--card);border-radius:var(--radius-sm);padding:1rem;border:1px solid var(--border)">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);margin-bottom:.5rem">Step 3 — Replace keys in this file</div>Open <strong style="color:var(--text)">script.js</strong> in a text editor and replace these 3 values at the top of the booking section:<br><br><code style="background:var(--deep);padding:.2rem .5rem;border-radius:4px;color:var(--gold);display:block;margin-bottom:.4rem">EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY'</code><code style="background:var(--deep);padding:.2rem .5rem;border-radius:4px;color:var(--gold);display:block;margin-bottom:.4rem">EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID'</code><code style="background:var(--deep);padding:.2rem .5rem;border-radius:4px;color:var(--gold);display:block">EMAILJS_TEMPLATE_COMPANY = 'ds_company_alert'<br>EMAILJS_TEMPLATE_CUSTOMER = 'ds_customer_confirm'</code>
+      </div>
+      <div style="font-size:.75rem;color:var(--muted);text-align:center">All keys are found in your EmailJS Dashboard → Account → API Keys. Your Public Key is now `ynAKx0CuhnGcuNjz-`.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SENDING OVERLAY -->
+<div class="sending-overlay" id="sendingOverlay">
+  <div class="send-spinner"></div>
+  <div class="send-text">Sending your booking...</div>
+  <div class="send-sub">Notifying Dream Space &amp; sending your confirmation</div>
+</div>
+
+<!-- SPA CONTENT WRAPPER (Initially visible) -->
+<div id="landing-page" style="display:block;">
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar"></div>
+
+<!-- COOKIE BANNER -->
+<div id="cookie">
+  <p>🍪 We use cookies to improve your experience. By continuing, you agree to our <a href="#">Privacy Policy</a>.</p>
+  <button class="cookie-accept" onclick="acceptCookie()">Accept & Continue</button>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="logo">
+    <div class="logo-icon">💡</div>
+    Dream<span>Space</span>
+  </a>
+  <div class="nav-center">
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#why">Why Us</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+  <div class="nav-right">
+<button class="theme-toggle" id="themeToggle" title="Toggle theme">🌙</button>
+<a href="javascript:void(0)" onclick="showBooking('IT Support & Helpdesk')" class="nav-book">📅 Book Now</a>
+    <a href="#contact" class="nav-cta">Get a Quote</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="#how" onclick="closeMob()">How It Works</a></li>
+    <li><a href="#services" onclick="closeMob()">Services</a></li>
+    <li><a href="#portfolio" onclick="closeMob()">Portfolio</a></li>
+    <li><a href="#why" onclick="closeMob()">Why Us</a></li>
+    <li><a href="#pricing" onclick="closeMob()">Pricing</a></li>
+    <li><a href="#testimonials" onclick="closeMob()">Testimonials</a></li>
+    <li><a href="#faq" onclick="closeMob()">FAQ</a></li>
+    <li><a href="#contact" onclick="closeMob()">Contact</a></li>
+    <li><a href="javascript:void(0)" onclick="showBooking('IT Support & Helpdesk');closeMob()" style="color:var(--accent)">📅 Book a Service</a></li>
+  </ul>
+<a href="javascript:void(0)" class="mob-cta" style="background:linear-gradient(135deg,var(--accent2),var(--accent));margin-right:.6rem" onclick="showBooking('IT Support & Helpdesk');closeMob()">📅 Book Now</a>
+  <a href="#contact" class="mob-cta" onclick="closeMob()">Get Free Consultation →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-glow3"></div>
+
+  <div class="hero-badge"><div class="pulse-dot"></div>Lagos-Based MSP · Est. 2020</div>
+
+  <h1>Your Technology.<br><em>Fully Managed.</em><br>Always On.</h1>
+
+  <p class="hero-sub">Dream Space delivers enterprise-grade IT support, CCTV, networking, POS solutions and more — so your business runs without interruption, 24/7.</p>
+
+  <div class="hero-actions">
+<a href="javascript:void(0)" onclick="showBooking('IT Support & Helpdesk')" class="btn-primary">📅 Book a Service →</a>
+
+    <a href="#contact" class="btn-ghost">Get Free Consultation</a>
+    <a href="#services" class="btn-ghost">Explore Services</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num" data-count="150">0</div><div class="stat-label">Clients Served</div></div>
+    <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Support Coverage</div></div>
+    <div class="stat"><div class="stat-num" data-count="5">0</div><div class="stat-label">Years Experience</div></div>
+    <div class="stat"><div class="stat-num" data-count="99">0</div><div class="stat-label">% Uptime SLA</div></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker" id="ticker">
+    <span class="ticker-item"><span class="ticker-dot">◆</span> IT Support &amp; Helpdesk</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> CCTV Installation</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Network Infrastructure</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> POS Solutions</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Hotel Management Systems</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Microsoft 365</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Hardware &amp; Software</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Cloud Services</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Cybersecurity</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> ERP Systems</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> IT Support &amp; Helpdesk</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> CCTV Installation</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Network Infrastructure</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> POS Solutions</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Hotel Management Systems</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Microsoft 365</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Hardware &amp; Software</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Cloud Services</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Cybersecurity</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> ERP Systems</span>
+  </div>
+</div>
+
+<!-- TRUST -->
+<div id="trust" class="reveal">
+  <p class="trust-label">Trusted by businesses across Lagos</p>
+  <div class="trust-logos">
+    <div class="trust-logo">🏨 Hotel Partners</div>
+    <div class="trust-logo">🛒 Retail Chains</div>
+    <div class="trust-logo">🍽️ Restaurant Groups</div>
+    <div class="trust-logo">🏢 Corporate Offices</div>
+    <div class="trust-logo">💇 Salon Networks</div>
+    <div class="trust-logo">🏥 Healthcare Clinics</div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="how-header reveal">
+    <span class="section-label">Our Process</span>
+    <h2>How It <em>Works</em></h2>
+    <p class="section-intro">Simple, transparent, and efficient — getting started with Dream Space takes less than 24 hours.</p>
+  </div>
+  <div class="how-steps">
+    <div class="how-step reveal">
+      <div class="step-num">01</div>
+      <div class="step-icon">📋</div>
+      <h3>Discovery Call</h3>
+      <p>We assess your current IT environment, identify gaps, and understand your business needs.</p>
+      <div class="step-arrow">›</div>
+    </div>
+    <div class="how-step reveal reveal-delay-1">
+      <div class="step-num">02</div>
+      <div class="step-icon">📐</div>
+      <h3>Custom Proposal</h3>
+      <p>We design a tailored solution and deliver a clear, transparent quote with no hidden costs.</p>
+      <div class="step-arrow">›</div>
+    </div>
+    <div class="how-step reveal reveal-delay-2">
+      <div class="step-num">03</div>
+      <div class="step-icon">⚙️</div>
+      <h3>Implementation</h3>
+      <p>Our engineers deploy, configure, and test all solutions — minimizing disruption to your operations.</p>
+      <div class="step-arrow">›</div>
+    </div>
+    <div class="how-step reveal reveal-delay-3">
+      <div class="step-num">04</div>
+      <div class="step-icon">🛡️</div>
+      <h3>Ongoing Support</h3>
+      <p>We monitor, maintain, and support your systems continuously — you're never alone.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BOOK CTA BANNER -->
+<div id="book-banner" style="background:var(--night);padding:0 5% 5rem">
+  <div style="max-width:1100px;margin:0 auto;background:linear-gradient(135deg,rgba(0,114,255,.12),rgba(0,198,255,.08));border:1px solid rgba(0,198,255,.2);border-radius:var(--radius);padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;" class="reveal">
+    <div>
+      <div style="font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem">Online Booking — Now Live</div>
+      <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:-.5px;line-height:1.2">Ready to get started? <span style="color:var(--accent)">Book your service</span> in minutes.</div>
+      <div style="font-size:.88rem;color:var(--muted);margin-top:.5rem">Choose your service, pick a date &amp; time, and we'll confirm within 2 hours.</div>
+    </div>
+    <div style="display:flex;gap:.8rem;flex-wrap:wrap;align-items:center">
+      <a href="javascript:void(0)" onclick="showBooking('Other / General Enquiry')" style="background:linear-gradient(135deg,var(--accent2),var(--accent));color:#000;text-decoration:none;padding:.85rem 2rem;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;white-space:nowrap;display:inline-flex;align-items:center;gap:.5rem;box-shadow:0 0 30px rgba(0,198,255,.25);transition:all var(--transition)" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 0 45px rgba(0,198,255,.45)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 0 30px rgba(0,198,255,.25)'">📅 Book a Service →</a>
+      <a href="#pricing" style="color:var(--muted);text-decoration:none;font-size:.85rem;border:1px solid var(--border);padding:.85rem 1.4rem;border-radius:var(--radius-sm);transition:all var(--transition)" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">View Pricing</a>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-header reveal">
+    <span class="section-label">What We Do</span>
+    <h2>Solutions Built for <em>Business Growth</em></h2>
+    <p class="section-intro">From day-to-day IT support to full infrastructure deployments — every angle covered.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal"><div class="service-icon">🖥️</div><h3>IT Support &amp; Helpdesk</h3><p>Remote and on-site technical support for hardware, software, and user issues. Fast response, minimal downtime.</p><span class="service-tag">Core Service</span></div>
+    <div class="service-card reveal reveal-delay-1"><div class="service-icon">📷</div><h3>CCTV Installation &amp; Config</h3><p>Professional surveillance system design, installation, and configuration for offices, hotels, retail stores, and warehouses.</p><span class="service-tag">Security</span></div>
+    <div class="service-card reveal reveal-delay-2"><div class="service-icon">🌐</div><h3>Networking &amp; Infrastructure</h3><p>Structured cabling, LAN/WAN setup, Wi-Fi deployment, firewall configuration, and network monitoring.</p><span class="service-tag">Infrastructure</span></div>
+    <div class="service-card reveal"><div class="service-icon">🧾</div><h3>Point of Sale Solutions</h3><p>POS hardware and software deployment for retail, restaurants, hotels, and supermarkets — with training and support.</p><span class="service-tag">Retail &amp; Hospitality</span></div>
+    <div class="service-card reveal reveal-delay-1"><div class="service-icon">🏨</div><h3>Hotel Management Systems</h3><p>End-to-end HMS deployment — reservations, billing, room management, and POS integration for hospitality.</p><span class="service-tag">Hospitality</span></div>
+    <div class="service-card reveal reveal-delay-2"><div class="service-icon">☁️</div><h3>Microsoft 365 &amp; Azure</h3><p>M365 tenant setup, Azure AD administration, email migration, SharePoint, Teams, and cloud productivity.</p><span class="service-tag">Cloud</span></div>
+    <div class="service-card reveal"><div class="service-icon">🔧</div><h3>Hardware &amp; Software</h3><p>Supply, installation, and maintenance of computers, printers, servers, and licensed software for businesses.</p><span class="service-tag">Hardware</span></div>
+    <div class="service-card reveal reveal-delay-1"><div class="service-icon">📊</div><h3>ERP &amp; Business Software</h3><p>Custom ERP, inventory management, and restaurant/retail software systems designed for Nigerian operations.</p><span class="service-tag">Enterprise</span></div>
+    <div class="service-card reveal reveal-delay-2"><div class="service-icon">🛡️</div><h3>Cybersecurity &amp; Backup</h3><p>Endpoint protection, data backup strategies, recovery planning, and security audits to safeguard your business.</p><span class="service-tag">Security</span></div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why">
+  <div class="why-inner">
+    <div class="why-visual">
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="why-circle"><div><div>24/7</div><small>Expert Support</small></div></div>
+    </div>
+    <div class="reveal">
+      <span class="section-label">Why Dream Space</span>
+      <h2>IT Partners You Can Actually <em>Rely On</em></h2>
+      <p class="section-intro" style="margin-bottom:2rem">We don't just fix problems — we prevent them.</p>
+      <ul class="why-list">
+        <li class="why-item"><div class="why-check">✓</div><div><h4>Rapid Response Times</h4><p>On-site within hours for critical issues. Remote support available round-the-clock.</p></div></li>
+        <li class="why-item"><div class="why-check">✓</div><div><h4>Industry-Specific Expertise</h4><p>Deep experience in hospitality, retail, and corporate environments across Lagos.</p></div></li>
+        <li class="why-item"><div class="why-check">✓</div><div><h4>Transparent Pricing</h4><p>No hidden fees. Clear SLAs and fixed-cost plans that fit your budget.</p></div></li>
+        <li class="why-item"><div class="why-check">✓</div><div><h4>Certified Professionals</h4><p>Our engineers hold industry certifications and stay current with evolving technology.</p></div></li>
+        <li class="why-item"><div class="why-check">✓</div><div><h4>Local Presence, Enterprise Capability</h4><p>Lagos-based team with the tools and processes of a world-class MSP.</p></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- INDUSTRIES -->
+<section id="industries">
+  <div class="industries-header reveal">
+    <span class="section-label">Industries We Serve</span>
+    <h2>Built for <em>Every Sector</em></h2>
+    <p class="section-intro">Tailored IT solutions for every type of business in Nigeria.</p>
+  </div>
+  <div class="industries-grid">
+    <div class="industry-card reveal"><div class="industry-icon">🏨</div><h3>Hospitality &amp; Hotels</h3><p>HMS, POS, CCTV, Wi-Fi</p></div>
+    <div class="industry-card reveal reveal-delay-1"><div class="industry-icon">🛒</div><h3>Retail &amp; Supermarkets</h3><p>POS, inventory, networking</p></div>
+    <div class="industry-card reveal reveal-delay-2"><div class="industry-icon">🍽️</div><h3>Restaurants &amp; QSR</h3><p>Order management, KOT, ERP</p></div>
+    <div class="industry-card reveal"><div class="industry-icon">🏢</div><h3>Corporate Offices</h3><p>M365, helpdesk, infrastructure</p></div>
+    <div class="industry-card reveal reveal-delay-1"><div class="industry-icon">💇</div><h3>Salons &amp; Spas</h3><p>Booking systems, POS, CCTV</p></div>
+    <div class="industry-card reveal reveal-delay-2"><div class="industry-icon">🏥</div><h3>Healthcare &amp; Clinics</h3><p>Records, networking, backup</p></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="testi-header reveal">
+    <span class="section-label">Client Feedback</span>
+    <h2>What Our <em>Clients Say</em></h2>
+    <p class="section-intro">Real feedback from businesses we support across Lagos.</p>
+  </div>
+  <div class="testi-slider reveal">
+    <div class="testi-track" id="testiTrack">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Dream Space completely transformed our hotel's technology setup. The HMS and POS integration they deployed saved us hours every day. Their support team is always responsive."</p>
+        <div class="testi-author"><div class="testi-avatar">AO</div><div><div class="testi-name">Adaeze Okonkwo</div><div class="testi-role">GM, Sunrise Boutique Hotel · VI, Lagos</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"The CCTV system they installed across our 3 branches is excellent. Clear footage, remote access, and it was done within a day. Professional team from start to finish."</p>
+        <div class="testi-author"><div class="testi-avatar">BM</div><div><div class="testi-name">Babatunde Martins</div><div class="testi-role">Owner, Martins Superstore · Ikeja, Lagos</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"We were struggling with constant network downtime. Dream Space came in, restructured everything and we haven't had an issue since. Brilliant work, worth every naira."</p>
+        <div class="testi-author"><div class="testi-avatar">CN</div><div><div class="testi-name">Chidera Nwosu</div><div class="testi-role">IT Manager, FinFirst Consulting · Lekki</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"The POS system has made billing and inventory tracking so much easier for our restaurant chain. Training was thorough and the after-support is top-notch."</p>
+        <div class="testi-author"><div class="testi-avatar">FK</div><div><div class="testi-name">Fatima Kadri</div><div class="testi-role">Director, Spice Route Restaurants · Lagos</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Microsoft 365 migration done seamlessly. Zero downtime, all our data intact, and the team even trained our staff on the new tools. Highly recommended."</p>
+        <div class="testi-author"><div class="testi-avatar">RE</div><div><div class="testi-name">Rotimi Eze</div><div class="testi-role">CEO, Crossline HR Solutions · Abuja</div></div></div>
+      </div>
+    </div>
+    <div class="testi-controls">
+      <button class="testi-btn" id="testiPrev">←</button>
+      <button class="testi-btn" id="testiNext">→</button>
+    </div>
+    <div class="testi-dots" id="testiDots"></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="pricing-header reveal">
+    <span class="section-label">Service Packages</span>
+    <h2>Transparent <em>Pricing Plans</em></h2>
+    <p class="section-intro">No surprises. Pick a plan that fits your business or contact us for a custom quote.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card reveal">
+      <div class="pricing-name">Starter</div>
+      <div class="pricing-price"><sup>₦</sup>50,000</div>
+      <div class="pricing-period">per month</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> Remote IT Support (Business Hours)</li>
+        <li><span class="check">✓</span> Up to 5 Devices Managed</li>
+        <li><span class="check">✓</span> Monthly System Health Check</li>
+        <li><span class="check">✓</span> Email &amp; Phone Support</li>
+        <li class="off"><span class="x">✗</span> On-Site Support</li>
+        <li class="off"><span class="x">✗</span> CCTV / Networking Projects</li>
+        <li class="off"><span class="x">✗</span> Priority Response</li>
+      </ul>
+<a href="javascript:void(0)" onclick="showBooking('IT Support & Helpdesk')" class="pricing-btn outline">Get Started</a>
+    </div>
+    <div class="pricing-card popular reveal reveal-delay-1">
+      <div class="popular-badge">Most Popular</div>
+      <div class="pricing-name">Business</div>
+      <div class="pricing-price"><sup>₦</sup>120,000</div>
+      <div class="pricing-period">per month</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> Remote + On-Site Support</li>
+        <li><span class="check">✓</span> Up to 20 Devices Managed</li>
+        <li><span class="check">✓</span> Weekly System Health Check</li>
+        <li><span class="check">✓</span> 24/7 Emergency Response</li>
+        <li><span class="check">✓</span> Network Monitoring</li>
+        <li><span class="check">✓</span> 1 CCTV/Network Project/year</li>
+        <li class="off"><span class="x">✗</span> Dedicated Account Manager</li>
+      </ul>
+<a href="javascript:void(0)" onclick="showBooking('Network Setup')" class="pricing-btn filled">Book Now</a>
+    </div>
+    <div class="pricing-card reveal reveal-delay-2">
+      <div class="pricing-name">Enterprise</div>
+      <div class="pricing-price">Custom</div>
+      <div class="pricing-period">tailored quote</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> Unlimited Devices &amp; Sites</li>
+        <li><span class="check">✓</span> Dedicated Account Manager</li>
+        <li><span class="check">✓</span> SLA-Backed Response Times</li>
+        <li><span class="check">✓</span> Full Project Management</li>
+        <li><span class="check">✓</span> HMS / ERP / POS Deployment</li>
+        <li><span class="check">✓</span> Staff Training Included</li>
+        <li><span class="check">✓</span> Priority 24/7 Support</li>
+      </ul>
+<a href="javascript:void(0)" onclick="showBooking('Other / General Enquiry')" class="pricing-btn outline">Contact Us</a>
+    </div>
+  </div>
+  <p class="pricing-note">All prices exclude VAT. Custom quotes available for multi-branch and hospitality businesses. <a href="#contact" style="color:var(--accent)">Talk to us →</a></p>
+</section>
+
+<!-- TEAM -->
+<section id="team" style="background:var(--deep)">
+  <div class="team-header reveal">
+    <span class="section-label">The Team</span>
+    <h2>People Behind <em>Dream Space</em></h2>
+    <p class="section-intro">Certified professionals passionate about technology and business.</p>
+  </div>
+  <div class="team-grid">
+    <div class="team-card reveal">
+      <div class="team-avatar">ET</div>
+      <h3>Emmanuel Tar</h3>
+      <div class="role">Founder &amp; Lead IT Consultant</div>
+      <p>IT specialist with expertise in ERP/POS systems, Microsoft 365/Azure AD, enterprise helpdesk, and full-stack development.</p>
+      <div class="team-socials">
+        <a href="mailto:emmanuel.tar@outlook.com" class="team-social" title="Email">✉️</a>
+        <a href="tel:+2347018812187" class="team-social" title="Call">📞</a>
+        <a href="https://wa.me/2347018812187" class="team-social" title="WhatsApp">💬</a>
+      </div>
+    </div>
+    <div class="team-card reveal reveal-delay-1">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#F5A623,#e67e22)">NC</div>
+      <h3>Network &amp; CCTV Team</h3>
+      <div class="role">Infrastructure Engineers</div>
+      <p>Certified networking and surveillance specialists handling structured cabling, Wi-Fi, firewall, and CCTV installations.</p>
+      <div class="team-socials">
+        <a href="#contact" class="team-social">📋</a>
+      </div>
+    </div>
+    <div class="team-card reveal reveal-delay-2">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#00D68F,#00965e)">HS</div>
+      <h3>Helpdesk &amp; Support</h3>
+      <div class="role">Support Specialists</div>
+      <p>Dedicated support team providing fast remote and on-site assistance — available around the clock for critical issues.</p>
+      <div class="team-socials">
+        <a href="#contact" class="team-social">📋</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="faq-inner">
+    <div class="faq-header reveal">
+      <span class="section-label">FAQs</span>
+      <h2>Common <em>Questions</em></h2>
+      <p class="section-intro">Everything you need to know before working with us.</p>
+    </div>
+    <div id="faqList" class="reveal">
+      <div class="faq-item"><button class="faq-question">What areas do you serve?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">We are based in Victoria Island, Lagos and serve clients across Lagos State, including Lekki, Ikeja, Abuja, and other locations in Nigeria. Remote support is available nationwide.</div></div></div>
+      <div class="faq-item"><button class="faq-question">How quickly can you respond to an IT emergency?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">For Business and Enterprise clients, we offer 24/7 emergency support with on-site response within 2–4 hours in Lagos. Remote support is available immediately upon contact.</div></div></div>
+      <div class="faq-item"><button class="faq-question">Do you supply hardware and software?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Yes. We supply, configure, and install computers, servers, printers, POS terminals, CCTV cameras, network equipment, and licensed software including Microsoft 365.</div></div></div>
+      <div class="faq-item"><button class="faq-question">Can you handle multi-branch businesses?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Absolutely. We specialize in multi-branch deployments for retail chains, hotel groups, and restaurant networks — providing centralized management and consistent support across all locations.</div></div></div>
+      <div class="faq-item"><button class="faq-question">What is your pricing model?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">We offer monthly managed service plans starting from ₦50,000/month, as well as one-time project pricing for CCTV, networking, and installations. Custom enterprise quotes are available — contact us for details.</div></div></div>
+      <div class="faq-item"><button class="faq-question">Do you provide training for staff?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Yes. All installations and deployments include staff training as standard. For Enterprise clients, ongoing training sessions are included in the package.</div></div></div>
+      <div class="faq-item"><button class="faq-question">Is there a contract or minimum commitment?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Monthly plans require a minimum 3-month commitment. Annual plans attract a 10% discount. One-time projects have no ongoing commitment required.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-info reveal">
+      <span class="section-label">Get In Touch</span>
+      <h2>Let's Talk About Your <em>IT Needs</em></h2>
+      <p>Ready to upgrade your infrastructure? Reach us directly or fill the form — we respond within 2 business hours.</p>
+      <div class="contact-detail"><div class="contact-detail-icon">✉️</div><div><span>Email Us</span><a href="mailto:emmanuel.tar@outlook.com">emmanuel.tar@outlook.com</a></div></div>
+      <div class="contact-detail"><div class="contact-detail-icon">📞</div><div><span>Call / WhatsApp</span><a href="tel:+2347018812186">+234 701 881 2186</a></div></div>
+      <div class="contact-detail"><div class="contact-detail-icon">📍</div><div><span>Location</span><a href="https://maps.google.com/?q=Victoria+Island+Lagos" target="_blank">Victoria Island, Lagos, Nigeria</a></div></div>
+      <div class="contact-detail"><div class="contact-detail-icon">🕐</div><div><span>Working Hours</span><a href="#">Mon–Sat: 8am–6pm · Emergency: 24/7</a></div></div>
+      <a href="https://maps.google.com/?q=Victoria+Island+Lagos" target="_blank" class="map-wrap">
+        <span class="map-icon">📍</span>
+        <span>Victoria Island, Lagos, Nigeria</span>
+        <small style="font-size:.72rem;color:var(--accent)">View on Google Maps →</small>
+      </a>
+    </div>
+    <div class="contact-form reveal reveal-delay-1">
+      <div class="form-title">Send Us a Message</div>
+      <div id="formBody">
+        <div class="form-row">
+          <div class="form-group"><label>First Name *</label><input type="text" id="fname" placeholder="e.g. Amaka"><span class="field-error" id="err-fname">Please enter your first name</span></div>
+          <div class="form-group"><label>Last Name</label><input type="text" id="lname" placeholder="e.g. Okafor"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Email Address *</label><input type="email" id="email" placeholder="you@company.com"><span class="field-error" id="err-email">Please enter a valid email</span></div>
+          <div class="form-group"><label>Phone Number</label><input type="tel" id="phone" placeholder="+234 800 000 0000"></div>
+        </div>
+        <div class="form-group"><label>Company / Business Name</label><input type="text" id="company" placeholder="Your business name"></div>
+        <div class="form-group">
+          <label>Service Needed *</label>
+          <select id="service"><option value="">— Select a service —</option><option>IT Support &amp; Helpdesk</option><option>CCTV Installation &amp; Configuration</option><option>Networking &amp; Infrastructure</option><option>Point of Sale (POS) Solutions</option><option>Hotel Management System</option><option>Microsoft 365 &amp; Azure</option><option>Hardware &amp; Software Supply</option><option>ERP &amp; Business Software</option><option>Cybersecurity &amp; Backup</option><option>Other / General Enquiry</option></select>
+          <span class="field-error" id="err-service">Please select a service</span>
+        </div>
+        <div class="form-group"><label>Message *</label><textarea id="message" placeholder="Tell us about your business and what you need help with..."></textarea><span class="field-error" id="err-message">Please enter your message</span></div>
+        <button class="form-submit" id="submitBtn" onclick="handleSubmit()">Send Message →</button>
+        <p class="form-note">🔒 Your information is confidential. We typically reply within 2 hours.</p>
+      </div>
+      <div class="success-msg" id="successMsg">
+        <span class="tick">✅</span>
+        <strong style="font-family:'Syne',sans-serif;font-size:1.1rem">Message Received!</strong><br>
+        <span style="color:var(--muted);font-size:.9rem">We'll be in touch within 2 business hours.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="logo"><div class="logo-icon">💡</div>Dream<span>Space</span></a>
+      <p>Your trusted Managed IT Services Partner in Lagos. Powering the technology behind your business growth.</p>
+      <div class="footer-social">
+        <a href="mailto:emmanuel.tar@outlook.com" title="Email">✉️</a>
+        <a href="tel:+2347018812186" title="Call">📞</a>
+        <a href="https://wa.me/2347018812186" title="WhatsApp" target="_blank">💬</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">IT Support</a></li>
+        <li><a href="#services">CCTV &amp; Security</a></li>
+        <li><a href="#services">Networking</a></li>
+        <li><a href="#services">POS Solutions</a></li>
+        <li><a href="#services">Hotel Systems</a></li>
+        <li><a href="#services">Microsoft 365</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#why">Why Dream Space</a></li>
+        <li><a href="#team">Our Team</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="javascript:void(0)" onclick="showBooking('Other / General Enquiry')" style="color:var(--accent);font-weight:600">📅 Book a Service</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#contact">Contact Us</a></li>
+        <li><a href="mailto:emmanuel.tar@outlook.com">emmanuel.tar@outlook.com</a></li>
+        <li><a href="tel:+2347018812186">+234 701 881 2186</a></li>
+        <li><a href="#">Victoria Island, Lagos</a></li>
+        <li><a href="#faq">FAQs</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Dream Space MSP. All rights reserved.</p>
+    <div class="footer-badges">
+      <span class="footer-badge">🇳🇬 Proudly Nigerian</span>
+      <span class="footer-badge">🔒 Secure &amp; Trusted</span>
+    </div>
+  </div>
+</footer>
+
+</div> <!-- END LANDING PAGE WRAPPER -->
+
+<!-- BOOKING SPA FLOW (Hidden by default) -->
+<div id="booking-flow" style="display:none;">
+  <div class="booking-page">
+    <aside class="sidebar">
+      <a href="javascript:void(0)" onclick="hideBooking()" class="sidebar-logo">
+        <div class="logo-mark">💡</div><div class="logo-text">Dream<span>Space</span></div>
+      </a>
+      <div><div class="sidebar-heading">Book a <em>Service</em></div></div>
+      <nav class="steps-nav" id="stepsNav">
+        <div class="step-item active" data-step="1" onclick="jumpTo(1)"><div class="step-circle" id="sc1">1</div><div><div class="step-label">Service</div><div class="step-sub">Choose what you need</div></div></div>
+        <div class="step-connector" id="conn1"></div>
+        <div class="step-item" data-step="2" onclick="jumpTo(2)"><div class="step-circle" id="sc2">2</div><div><div class="step-label">Date &amp; Time</div><div class="step-sub">Pick your slot</div></div></div>
+        <div class="step-connector" id="conn2"></div>
+        <div class="step-item" data-step="3" onclick="jumpTo(3)"><div class="step-circle" id="sc3">3</div><div><div class="step-label">Your Details</div><div class="step-sub">Contact info</div></div></div>
+        <div class="step-connector" id="conn3"></div>
+        <div class="step-item" data-step="4" onclick="jumpTo(4)"><div class="step-circle" id="sc4">4</div><div><div class="step-label">Review</div><div class="step-sub">Confirm booking</div></div></div>
+        <div class="step-connector" id="conn4"></div>
+        <div class="step-item" data-step="5"><div class="step-circle" id="sc5">5</div><div><div class="step-label">Confirmed</div><div class="step-sub">You're booked!</div></div></div>
+      </nav>
+      <div class="booking-summary" id="bookingSummary" style="display:none">
+        <div class="summary-title">Summary</div>
+        <div class="summary-row" id="sum-service"><span class="summary-key">Service</span><span id="sum-svc-val" class="summary-val">—</span></div>
+        <div class="summary-row" id="sum-date"><span class="summary-key">Date</span><span id="sum-date-val" class="summary-val">—</span></div>
+      </div>
+      <button class="btn-ghost" onclick="hideBooking()" style="margin-top:auto">← Back to Home</button>
+    </aside>
+
+    <main class="booking-main">
+      <!-- Panel 1 -->
+      <div class="step-panel active" id="panel1">
+        <div class="panel-header">
+          <div class="panel-label">Step 1 of 4</div>
+          <h2 class="panel-title">What service do you <em>need?</em></h2>
+          <p class="panel-desc">Select the service that best matches your requirement. Not sure? Choose "Other" and describe it in the next steps.</p>
+        </div>
+
+        <div class="service-grid-booking" id="serviceGrid">
+          <div class="service-option" data-svc="IT Support & Helpdesk" data-price="15000" onclick="selectService(this)"><span class="sel-check">✓</span><span class="svc-icon">🖥️</span><div class="svc-name">IT Support &amp; Helpdesk</div><div class="svc-desc">Remote or on-site technical support for hardware, software, and general IT issues.</div><span class="svc-tag">From ₦15,000</span></div>
+          <div class="service-option" data-svc="CCTV Installation" data-price="80000" onclick="selectService(this)"><span class="sel-check">✓</span><span class="svc-icon">📷</span><div class="svc-name">CCTV Installation</div><div class="svc-desc">Professional camera installation, DVR/NVR setup and remote viewing configuration.</div><span class="svc-tag">From ₦80,000</span></div>
+          <div class="service-option" data-svc="Network Setup" data-price="50000" onclick="selectService(this)"><span class="sel-check">✓</span><span class="svc-icon">🌐</span><div class="svc-name">Network Setup</div><div class="svc-desc">LAN/WAN configuration, Wi-Fi deployment, cabling and firewall setup.</div><span class="svc-tag">From ₦50,000</span></div>
+          <div class="service-option" data-svc="POS Installation" data-price="45000" onclick="selectService(this)"><span class="sel-check">✓</span><span class="svc-icon">🧾</span><div class="svc-name">POS Installation</div><div class="svc-desc">Point of sale hardware and software setup, configuration, and staff training.</div><span class="svc-tag">From ₦45,000</span></div>
+          <div class="service-option" data-svc="Hotel Management System" data-price="120000" onclick="selectService(this)"><span class="sel-check">✓</span><span class="svc-icon">🏨</span><div class="svc-name">Hotel Management System</div><div class="svc-desc">Full HMS deployment — reservations, billing, room management, POS integration.</div><span class="svc-tag">From ₦120,000</span></div>
+          <div class="service-option" data-svc="Microsoft 365 Setup" data-price="35000" onclick="selectService(this)"><span class="sel-check">✓</span><span class="svc-icon">☁️</span><div class="svc-name">Microsoft 365 Setup</div><div class="svc-desc">M365 tenant config, Azure AD setup, email migration, and Teams deployment.</div><span class="svc-tag">From ₦35,000</span></div>
+          <div class="service-option" data-svc="Hardware Supply & Setup" data-price="0" onclick="selectService(this)"><span class="sel-check">✓</span><span class="svc-icon">🔧</span><div class="svc-name">Hardware Supply &amp; Setup</div><div class="svc-desc">Computer, printer, server supply, configuration, maintenance and upgrades.</div><span class="svc-tag">Quote on request</span></div>
+          <div class="service-option" data-svc="IT Consultation" data-price="20000" onclick="selectService(this)"><span class="sel-check">✓</span><span class="svc-icon">💡</span><div class="svc-name">IT Consultation</div><div class="svc-desc">Expert session for IT strategy, infrastructure planning, or technology assessment.</div><span class="svc-tag">₦20,000/hr</span></div>
+          <div class="service-option" data-svc="Other / General Enquiry" data-price="0" onclick="selectService(this)"><span class="sel-check">✓</span><span class="svc-icon">📋</span><div class="svc-name">Other / General Enquiry</div><div class="svc-desc">Not sure? Describe your needs and our team will propose the right solution.</div><span class="svc-tag">Free consultation</span></div>
+        </div>
+
+        <div>
+          <div class="section-divider" style="margin-bottom:.9rem">Service Priority</div>
+          <div class="priority-row">
+            <div class="priority-opt normal selected" onclick="selectPriority(this,'Normal')"><div class="p-icon">🟢</div><div class="p-name">Normal</div><div class="p-desc">Within 3–5 days</div><div class="p-badge">Standard</div></div>
+            <div class="priority-opt urgent" onclick="selectPriority(this,'Urgent')"><div class="p-icon">🟡</div><div class="p-name">Urgent</div><div class="p-desc">Within 24–48 hrs</div><div class="p-badge">+25% fee</div></div>
+            <div class="priority-opt emergency" onclick="selectPriority(this,'Emergency')"><div class="p-icon">🔴</div><div class="p-name">Emergency</div><div class="p-desc">Same day / ASAP</div><div class="p-badge">+50% fee</div></div>
+          </div>
+        </div>
+        <div class="nav-btns"><div></div><button class="btn-next" id="next1" onclick="goNext(1)" disabled>Continue →</button></div>
+      </div>
+
+      <!-- Panel 2 -->
+      <div class="step-panel" id="panel2">
+        <div class="panel-header">
+          <div class="panel-label">Step 2 of 4</div>
+          <h2 class="panel-title">Pick a <em>date &amp; time</em></h2>
+          <p class="panel-desc">Select an available date then choose your preferred time slot. 🟢 dots indicate days with availability.</p>
+        </div>
+
+        <div class="calendar-wrap">
+          <div class="cal-header"><div class="cal-month" id="calMonth"></div><div class="cal-nav"><button class="cal-btn" onclick="prevMonth()">←</button><button class="cal-btn" onclick="nextMonth()">→</button></div></div>
+          <div class="cal-days-header">
+            <div class="cal-day-name">Sun</div><div class="cal-day-name">Mon</div><div class="cal-day-name">Tue</div>
+            <div class="cal-day-name">Wed</div><div class="cal-day-name">Thu</div><div class="cal-day-name">Fri</div><div class="cal-day-name">Sat</div>
+          </div>
+          <div class="cal-grid" id="calGrid"></div>
+        </div>
+        <div id="timeSection" style="display:none">
+          <div class="section-divider" style="margin-bottom:1.1rem">Available Time Slots</div>
+          <div class="slots-morning"><div class="time-label">🌅 Morning</div><div class="time-grid" id="slotsMorning"></div></div>
+          <div class="slots-afternoon"><div class="time-label">☀️ Afternoon</div><div class="time-grid" id="slotsAfternoon"></div></div>
+          <div style="margin-top:1.1rem">
+            <div class="section-divider" style="margin-bottom:.7rem">Estimated Duration</div>
+            <div class="duration-row" id="durationRow"></div>
+          </div>
+        </div>
+
+        <div class="info-box"><span class="i-icon">ℹ️</span><span>On-site visits are available across Lagos. Remote support is available nationwide. Our team will confirm your booking within 2 hours.</span></div>
+
+        <div class="nav-btns">
+          <button class="btn-back" onclick="goBack(2)">← Back</button>
+          <button class="btn-next" id="next2" onclick="goNext(2)" disabled>Continue →</button>
+        </div>
+      </div>
+
+      <!-- Panel 3 -->
+      <div class="step-panel" id="panel3">
+        <div class="panel-header">
+          <div class="panel-label">Step 3 of 4</div>
+          <h2 class="panel-title">Your <em>details</em></h2>
+          <p class="panel-desc">We'll use this to send your confirmation email and contact you before your appointment.</p>
+        </div>
+
+        <div class="form-grid-booking">
+          <div class="form-group"><label>First Name *</label><input type="text" id="d_fname" placeholder="e.g. Amaka"><span class="err-msg" id="e_fname">Required</span></div>
+          <div class="form-group"><label>Last Name *</label><input type="text" id="d_lname" placeholder="e.g. Okafor"><span class="err-msg" id="e_lname">Required</span></div>
+          <div class="form-group"><label>Email Address * <span style="font-size:.65rem;color:var(--success);font-weight:600;text-transform:none;letter-spacing:0">(confirmation will be sent here)</span></label><input type="email" id="d_email" placeholder="you@company.com"><span class="err-msg" id="e_email">Enter a valid email address</span></div>
+          <div class="form-group"><label>Phone Number *</label><input type="tel" id="d_phone" placeholder="+234 800 000 0000"><span class="err-msg" id="e_phone">Required</span></div>
+          <div class="form-group"><label>Company / Business Name</label><input type="text" id="d_company" placeholder="Your business name (optional)"></div>
+          <div class="form-group"><label>Location / Address *</label><input type="text" id="d_location" placeholder="e.g. Lekki Phase 1, Lagos"><span class="err-msg" id="e_location">Required for on-site visits</span></div>
+          <div class="form-group full"><label>Describe the Issue or Requirement *</label><textarea id="d_desc" placeholder="Describe what's happening or what you need. Include error messages, device types, number of workstations, etc."></textarea><span class="err-msg" id="e_desc">Please describe your requirement</span></div>
+          <div class="form-group"><label>How Did You Hear About Us?</label><select id="d_source"><option value="">— Select —</option><option>Google Search</option><option>WhatsApp</option><option>Referral</option><option>Social Media</option><option>Walk-in / Flyer</option><option>Returning Client</option></select></div>
+          <div class="form-group"><label>Preferred Contact Method</label><select id="d_contact_pref"><option>Phone Call</option><option>WhatsApp</option><option>Email</option></select></div>
+
+          <div class="form-group full">
+            <label>Attach Site Photos / Equipment (Optional)</label>
+            <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:.5rem" id="photoPreviewContainer">
+              <label style="width:100px;height:100px;border:2px dashed var(--border);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all var(--transition);background:var(--card)" onmouseover="this.style.borderColor='var(--accent)';this.style.background='rgba(0,198,255,.05)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--card)'">
+                <span style="font-size:1.5rem">📸</span>
+                <span style="font-size:.62rem;font-weight:800;margin-top:.3rem;letter-spacing:.5px">ADD PHOTO</span>
+                <input type="file" id="site_photos" multiple accept="image/*" style="display:none" onchange="handlePhotoUpload(this)">
+              </label>
+            </div>
+            <p style="font-size:.7rem;color:var(--muted);margin-top:.5rem">Attach photos of server room, hardware, or camera spots. Max 4 files.</p>
+          </div>
+        </div>
+
+        <div class="info-box"><span class="i-icon">📧</span><span>After confirming your booking, you will receive an <strong>automatic confirmation email</strong> at the address you provide. Dream Space will also receive a full notification with your details.</span></div>
+
+        <div class="nav-btns">
+          <button class="btn-back" onclick="goBack(3)">← Back</button>
+          <button class="btn-next" id="next3" onclick="goNext(3)">Review Booking →</button>
+        </div>
+      </div>
+
+      <!-- Panel 4 -->
+      <div class="step-panel" id="panel4">
+        <div class="panel-header">
+          <div class="panel-label">Step 4 of 4</div>
+          <h2 class="panel-title">Review &amp; <em>confirm</em></h2>
+          <p class="panel-desc">Check everything is correct. Confirming will instantly send emails to you and Dream Space.</p>
+        </div>
+
+        <div class="review-card">
+          <div class="review-section">
+            <div class="rev-section-title">Service Details <span class="rev-edit" onclick="jumpTo(1)">Edit →</span></div>
+            <div class="rev-grid">
+              <div class="rev-item"><div class="rev-key">Service</div><div class="rev-val" id="rv-svc">—</div></div>
+              <div class="rev-item"><div class="rev-key">Priority</div><div class="rev-val" id="rv-pri">—</div></div>
+            </div>
+          </div>
+          <div class="review-section">
+            <div class="rev-section-title">Appointment <span class="rev-edit" onclick="jumpTo(2)">Edit →</span></div>
+            <div class="rev-grid">
+              <div class="rev-item"><div class="rev-key">Date</div><div class="rev-val" id="rv-date">—</div></div>
+              <div class="rev-item"><div class="rev-key">Time</div><div class="rev-val" id="rv-time">—</div></div>
+              <div class="rev-item"><div class="rev-key">Duration</div><div class="rev-val" id="rv-dur">—</div></div>
+            </div>
+          </div>
+          <div class="review-section">
+            <div class="rev-section-title">Your Information <span class="rev-edit" onclick="jumpTo(3)">Edit →</span></div>
+            <div class="rev-grid">
+              <div class="rev-item"><div class="rev-key">Name</div><div class="rev-val" id="rv-name">—</div></div>
+              <div class="rev-item"><div class="rev-key">Email</div><div class="rev-val" id="rv-email" style="word-break:break-all">—</div></div>
+              <div class="rev-item"><div class="rev-key">Phone</div><div class="rev-val" id="rv-phone">—</div></div>
+              <div class="rev-item"><div class="rev-key">Location</div><div class="rev-val" id="rv-loc">—</div></div>
+              <div class="rev-item"><div class="rev-key">Photos</div><div class="rev-val" id="rv-photos">No photos attached</div></div>
+              <div class="rev-item" style="grid-column:1/-1"><div class="rev-key">Description</div><div class="rev-val" id="rv-desc" style="white-space:pre-wrap">—</div></div>
+            </div>
+          </div>
+          <div class="review-section">
+            <div class="rev-section-title">Pricing Estimate</div>
+            <table class="price-table">
+              <tr><td id="pt-svc">Service fee</td><td id="pt-base">₦0</td></tr>
+              <tr id="pt-pri-row" style="display:none"><td id="pt-pri-label">Priority surcharge</td><td id="pt-pri">₦0</td></tr>
+              <tr class="subtotal"><td>Subtotal</td><td id="pt-sub">₦0</td></tr>
+              <tr><td>VAT (7.5%)</td><td id="pt-vat">₦0</td></tr>
+              <tr class="total"><td>Estimated Total</td><td id="pt-total">₦0</td></tr>
+            </table>
+            <p class="price-note">* Estimate only. Final invoice issued after assessment. Payment due after service delivery.</p>
+          </div>
+        </div>
+
+        <div class="info-box" style="background:rgba(0,214,143,.05);border-color:rgba(0,214,143,.2)">
+          <span class="i-icon">📧</span>
+          <span>Clicking <strong>Confirm Booking</strong> will automatically send:<br>
+            • A <strong>confirmation email</strong> to <span id="confirm-email-preview" style="color:var(--accent)">your email</span><br>
+            • A <strong>new booking alert</strong> to Dream Space at emmanuel.tar@outlook.com</span>
+        </div>
+
+        <label class="terms-check">
+          <input type="checkbox" id="termsCheck" onchange="toggleTerms()">
+          <label for="termsCheck">I agree to Dream Space's <a href="#" onclick="return false">Terms of Service</a> and <a href="#" onclick="return false">Privacy Policy</a>. I understand the pricing shown is an estimate and the final cost may vary.</label>
+        </label>
+
+        <div class="nav-btns">
+          <button class="btn-back" onclick="goBack(4)">← Back</button>
+          <button class="btn-next" id="next4" onclick="confirmBooking()" disabled>Confirm &amp; Send Emails ✓</button>
+        </div>
+      </div>
+
+      <!-- Panel 5 -->
+      <div class="step-panel" id="panel5">
+        <div class="confirm-wrap">
+          <div class="confirm-anim">✅</div>
+          <h2>Booking Confirmed!</h2>
+          <p>Your appointment request has been received. Our team will contact you within <strong>1–2 business hours</strong> to confirm the details.</p>
+          <div class="booking-ref" id="bookingRef">DS-000000</div>
+
+          <!-- Email delivery status -->
+          <div class="email-status-wrap" id="emailStatusWrap"></div>
+
+          <!-- Fallback notice if emails failed -->
+          <div class="fallback-notice" id="fallbackNotice">
+            ⚠️ Automatic emails could not be sent (EmailJS not configured). Please use the WhatsApp button below to confirm your booking with Dream Space, or send an email manually.
+          </div>
+
+          <div class="confirm-details" id="confirmDetails"></div>
+
+          <div class="confirm-actions">
+            <a id="waConfirmBtn" href="#" class="wa-confirm-btn" target="_blank">💬 Confirm on WhatsApp</a>
+            <a id="emailFallbackBtn" href="#" class="btn-confirm-primary" style="display:none">✉️ Send via Email App</a>
+            <button class="btn-confirm-ghost" onclick="newBooking()">+ New Booking</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- BACK TO TOP -->
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+
+<!-- FLOATING CTAs -->
+<div class="float-cta">
+  <a href="javascript:void(0)" onclick="showBooking('IT Support & Helpdesk')" class="float-btn book"><span>📅</span><span class="float-label">Book Now</span></a>
+
+  <a href="tel:+2347018812186" class="float-btn"><span>📞</span><span class="float-label">Call Us</span></a>
+  <a href="https://wa.me/2347018812186?text=Hello%20Dream%20Space!%20I%27d%20like%20to%20enquire%20about%20your%20IT%20services." target="_blank"
+    class="float-btn wa"><span>💬</span><span class="float-label">WhatsApp</span></a>
+</div>
+
+<!-- WHATSAPP WIDGET -->
+<div class="wa-widget">
+  <button class="wa-toggle" id="waToggle" onclick="toggleWA()">💬</button>
+  <div class="wa-popup" id="waPopup">
+    <div class="wa-popup-head">
+      <div class="wa-avatar">💡</div>
+      <div>
+        <h4>Dream Space</h4>
+        <span>🟢 Online — typically replies instantly</span>
+      </div>
+    </div>
+    <div class="wa-msg">👋 Hi there! How can Dream Space help your business today? Send us a message on WhatsApp.</div>
+    <a href="https://wa.me/2347018812186?text=Hello%20Dream%20Space!%20I%27d%20like%20to%20enquire%20about%20your%20IT%20services." target="_blank"
+      class="wa-send">Start Chat on WhatsApp →</a>
+  </div>
+</div>
+
+<script src="script.js" defer></script>
+</body>
+</html>
