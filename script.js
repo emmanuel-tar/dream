@@ -1,3 +1,5 @@
+import { Analytics } from "@vercel/analytics/next";
+
 /* ─── PRODUCTION BOOTSTRAP ─── */
 window.addEventListener('load', () => {
   const loader = document.getElementById('loader');
