@@ -36,36 +36,43 @@ body::after{
 }
 
 /* ═══════════════════════════════════════════
-   PAGE LOADER
-═══════════════════════════════════════════ */
-#loader{
-  position:fixed;inset:0;background:var(--night);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  z-index:99999;transition:opacity .6s,visibility .6s;
-}
-#loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
-.loader-logo{
-  font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;
-  color:var(--text);letter-spacing:-1px;margin-bottom:2rem;
-}
-.loader-logo span{color:var(--accent)}
-.loader-bar{
-  width:180px;height:3px;background:var(--border);border-radius:10px;overflow:hidden;
-}
-.loader-fill{
-  height:100%;width:0;background:linear-gradient(90deg,var(--accent2),var(--accent));
-  border-radius:10px;animation:loaderFill 1.8s ease forwards;
-}
-@keyframes loaderFill{to{width:100%}}
-
-/* ═══════════════════════════════════════════
    PROGRESS BAR
 ═══════════════════════════════════════════ */
-#progress-bar{
-  position:fixed;top:0;left:0;height:3px;width:0;
-  background:linear-gradient(90deg,var(--accent2),var(--accent));
-  z-index:10000;transition:width .1s linear;
-  box-shadow:0 0 10px var(--accent);
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px; /* Increased slightly for pattern visibility */
+  width: 0;
+  /* Creates a moving "company texture" using CSS gradients instead of images */
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--accent2),
+    var(--accent2) 15px,
+    var(--accent) 15px,
+    var(--accent) 30px
+  );
+  background-size: 200% 100%;
+  animation: progressStripeMove 20s linear infinite;
+  z-index: 10000;
+  transition: width 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 15px var(--accent);
+}
+
+/* Adding the company "lightbulb" as a leading edge image indicator */
+#progress-bar::after {
+  content: '💡';
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  filter: drop-shadow(0 0 5px var(--accent));
+}
+
+@keyframes progressStripeMove {
+  from { background-position: 0 0; }
+  to { background-position: 200% 0; }
 }
 
 /* ═══════════════════════════════════════════
@@ -338,7 +345,10 @@ h2 em{font-style:normal;color:var(--accent)}
 .section-intro{color:var(--muted);font-size:1rem;max-width:520px;margin-top:.8rem}
 
 /* Reveal animation */
-.reveal{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+.reveal{
+  opacity:0;transform:translateY(30px);
+  transition:opacity .8s cubic-bezier(.4,0,.2,1), transform .8s cubic-bezier(.4,0,.2,1);
+  will-change: transform, opacity;}
 .reveal.visible{opacity:1;transform:translateY(0)}
 .reveal-delay-1{transition-delay:.1s}
 .reveal-delay-2{transition-delay:.2s}
@@ -1123,3 +1133,27 @@ footer{
   .service-grid-booking{grid-template-columns:1fr}
   .booking-main{padding:1.2rem .9rem 2rem}
 }
+
+/* ═══════════════════════════════════════════
+   PRODUCTION UX HELPERS
+═══════════════════════════════════════════ */
+.ds-booking-open #landing-page,
+.ds-booking-open #landing-page *,
+.ds-booking-open nav,
+.ds-booking-open #progress-bar,
+.ds-booking-open .float-cta,
+.ds-booking-open .wa-widget,
+.ds-booking-open #back-top {
+  display: none !important;
+}
+
+.ds-booking-open {
+  background: var(--night);
+  overflow-y: auto !important;
+}
+
+/* Smooth Scrollbar for Modern Browsers */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--night); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }

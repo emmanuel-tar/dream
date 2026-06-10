@@ -1,12 +1,3 @@
-import { Analytics } from "@vercel/analytics/next";
-
-/* ─── PRODUCTION BOOTSTRAP ─── */
-window.addEventListener('load', () => {
-  const loader = document.getElementById('loader');
-  if (loader) loader.classList.add('hidden');
-  initializeSlider();
-});
-
 /* ─── GLOBAL SCROLL HANDLER (Optimized) ─── */
 let scrollTicking = false;
 const progressBar = document.getElementById('progress-bar');
@@ -131,7 +122,8 @@ function goTo(idx) {
   const pv = perView();
   const max = cards.length - pv;
   current = Math.max(0, Math.min(idx, max));
-  const cardWidth = cards[0] ? cards[0].offsetWidth : 0;
+  // Added a small delay to ensure offsetWidth is captured during layout shifts
+  const cardWidth = cards[0] ? cards[0].getBoundingClientRect().width : 0;
   const gap = 24; // Assuming 1.5rem gap from CSS (1.5 * 16px = 24px)
   if (track) track.style.transform = `translateX(-${current * (cardWidth + gap)}px)`;
   
@@ -156,8 +148,11 @@ if (track) {
   track.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
   track.addEventListener('mouseleave', () => startAutoSlide());
 }
+
+// Initialize slider on DOM ready for fast interaction, and on full load for layout accuracy
+document.addEventListener('DOMContentLoaded', initializeSlider);
+window.addEventListener('load', initializeSlider);
 window.addEventListener('resize', () => goTo(0));
-window.addEventListener('load', initializeSlider); // Initialize slider after page load
 
 /* ─── FAQ ACCORDION ─── */
 document.querySelectorAll('.faq-question').forEach(btn => {
@@ -245,6 +240,15 @@ window.handleSubmit = handleSubmit; // Make globally accessible for inline oncli
 ['fname', 'email', 'service', 'message'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('input', () => el.classList.remove('error'));
+});
+
+/* ── DYNAMIC PAGE TITLE ─── */
+const originalTitle = document.title;
+window.addEventListener('blur', () => {
+  document.title = "Don't miss out! 💡 Dream Space";
+});
+window.addEventListener('focus', () => {
+  document.title = originalTitle;
 });
 
 /* ── WHATSAPP WIDGET ─── */
@@ -900,22 +904,16 @@ function updateSummary() {
   const bookingSummary = document.getElementById('bookingSummary');
   if (bookingSummary) bookingSummary.style.display = hasSvc ? 'flex' : 'none';
 
-  const showSummaryItem = (id, val) => {
+  const updateItem = (id, val) => {
     const row = document.getElementById(`sum-${id}`);
-    const valueEl = document.getElementById(`sum-${id}-val`);
+    const valEl = document.getElementById(`sum-${id}-val`);
     if (row) row.style.display = val ? '' : 'none';
-    if (valueEl && val) valueEl.textContent = val;
+    if (valEl) valEl.textContent = val || '—';
   };
 
-  showSummaryItem('service-val', state.service);
-  showSummaryItem('priority', state.priority !== 'Normal' ? state.priority : null);
-  const sumDiv1 = document.getElementById('sum-div1');
-  if (sumDiv1) sumDiv1.style.display = (state.date || state.time) ? '' : 'none';
-  showSummaryItem('date-val', state.dateLabel);
-  showSummaryItem('time-val', state.time);
-  const sumDiv2 = document.getElementById('sum-div2');
-  if (sumDiv2) sumDiv2.style.display = state.fname ? '' : 'none';
-  showSummaryItem('name', state.fname ? state.fname + ' ' + state.lname : null);
+  updateItem('service', state.service);
+  updateItem('date', state.dateLabel);
+  updateItem('time', state.time);
 }
 window.updateSummary = updateSummary; // Make globally accessible
 

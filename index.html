@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="booking-ux.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💡</text></svg>">
 <!-- EmailJS SDK (defer loading to prevent blocking rendering) -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
@@ -19,14 +18,6 @@
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-
-<!-- PAGE LOADER -->
-<div id="loader">
-  <div class="loader-logo">Dream<span>Space</span></div>
-  <div class="loader-bar">
-    <div class="loader-fill"></div>
-  </div>
-</div>
 
 <!-- EMAILJS SETUP NOTICE -->
 <div id="setup-notice" style="display:none;">
@@ -68,7 +59,7 @@
 </div>
 
 <!-- SPA CONTENT WRAPPER (Initially visible) -->
-<div id="landing-page" style="display:block;" aria-hidden="true">
+<div id="landing-page" style="display:block;">
 
 <!-- PROGRESS BAR -->
 <div id="progress-bar"></div>
@@ -598,6 +589,7 @@
       <div class="compact-summary" id="bookingSummary" style="display:none">
         <div class="summary-item" id="sum-service"><span class="sum-tag">Service:</span><span id="sum-service-val" class="sum-val">—</span></div>
         <div class="summary-item" id="sum-date"><span class="sum-tag">Schedule:</span><span id="sum-date-val" class="sum-val">—</span></div>
+        <div class="summary-item" id="sum-time" style="display:none"><span class="sum-tag">Time:</span><span id="sum-time-val" class="sum-val">—</span></div>
       </div>
 
       <!-- Panel 1 -->
