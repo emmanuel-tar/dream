@@ -1,0 +1,31 @@
+/* Booking UX helpers: keep the landing page from animating while booking is open */
+
+/* 1) Block all interactions + overlays from the landing page while booking is open */
+.ds-booking-open #landing-page,
+.ds-booking-open #landing-page *,
+.ds-booking-open nav,
+.ds-booking-open #progress-bar,
+.ds-booking-open #back-top,
+.ds-booking-open .hero-glow,
+.ds-booking-open .hero-glow2,
+.ds-booking-open .hero-glow3 {
+  display: none !important;
+}
+
+/* 2) Still keep the booking flow interactive */
+.ds-booking-open #booking-flow,
+.ds-booking-open #booking-flow * {
+  pointer-events: auto !important;
+}
+
+/* 3) Disable the most noticeable floating/background elements too */
+.ds-booking-open .float-cta,
+.ds-booking-open .wa-widget,
+.ds-booking-open #back-top {
+  display: none !important;
+}
+
+.ds-booking-open {
+  background: var(--night);
+  overflow-y: auto !important; /* Ensure the page can scroll if content exceeds viewport */
+}

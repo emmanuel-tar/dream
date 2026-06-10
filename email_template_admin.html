@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Booking Alert - Dream Space</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #080C14; color: #E8EDF5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 650px; margin: 20px auto; background-color: #0D1421; border-radius: 14px; border: 1px solid #F5A623; overflow: hidden; border-collapse: collapse;">
+        <!-- Alert Header -->
+        <tr>
+            <td align="center" style="padding: 20px; background-color: #F5A623;">
+                <div style="color: #080C14; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;">
+                    ⚠️ NEW BOOKING REQUEST
+                </div>
+            </td>
+        </tr>
+
+        <!-- Main Content -->
+        <tr>
+            <td style="padding: 40px 30px;">
+                <h2 style="font-size: 20px; color: #E8EDF5; margin-top: 0; margin-bottom: 20px; font-family: 'Syne', sans-serif;">
+                    New Lead: <span style="color: #F5A623;">{{booking_ref}}</span>
+                </h2>
+
+                <!-- Job Summary Grid -->
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 30px;">
+                    <tr>
+                        <td width="50%" style="padding: 15px; background-color: #111827; border-radius: 8px; border: 1px solid #1E2A3A;">
+                            <div style="color: #6B7A99; font-size: 10px; text-transform: uppercase; font-weight: 700;">Service</div>
+                            <div style="color: #00C6FF; font-weight: 700; font-size: 15px;">{{service}}</div>
+                        </td>
+                        <td width="50%" style="padding: 15px; background-color: #111827; border-radius: 8px; border: 1px solid #1E2A3A; margin-left: 10px;">
+                            <div style="color: #6B7A99; font-size: 10px; text-transform: uppercase; font-weight: 700;">Priority</div>
+                            <div style="color: #FF4D4F; font-weight: 700; font-size: 15px;">{{priority}}</div>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Client Details -->
+                <h3 style="color: #6B7A99; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Client Information</h3>
+                <div style="background-color: #111827; padding: 20px; border-radius: 12px; border: 1px solid #1E2A3A; margin-bottom: 30px;">
+                    <p style="margin: 0 0 10px 0; font-size: 14px;"><strong>Name:</strong> {{client_name}}</p>
+                    <p style="margin: 0 0 10px 0; font-size: 14px;"><strong>Company:</strong> {{company}}</p>
+                    <p style="margin: 0 0 10px 0; font-size: 14px;"><strong>Phone:</strong> {{client_phone}}</p>
+                    <p style="margin: 0 0 10px 0; font-size: 14px;"><strong>Email:</strong> {{client_email}}</p>
+                    <p style="margin: 0; font-size: 14px;"><strong>Location:</strong> {{location}}</p>
+                </div>
+
+                <!-- Requirements & Survey -->
+                <h3 style="color: #6B7A99; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Project Description</h3>
+                <div style="background-color: #111827; padding: 20px; border-radius: 12px; border: 1px solid #1E2A3A; margin-bottom: 30px;">
+                    <p style="margin: 0 0 15px 0; font-size: 15px; line-height: 1.6; color: #E8EDF5;">{{description}}</p>
+                    
+                    <!-- Photo Count Badge -->
+                    <div style="display: inline-block; padding: 6px 12px; background-color: #0072FF; color: #ffffff; border-radius: 4px; font-size: 12px; font-weight: 700;">
+                        📸 Survey Photos: {{photo_count}} attached
+                    </div>
+                </div>
+
+                <!-- Logistics -->
+                <table width="100%" cellpadding="10" cellspacing="0" border="0" style="background-color: #111827; border-radius: 12px; border: 1px solid #1E2A3A;">
+                    <tr>
+                        <td style="border-bottom: 1px solid #1E2A3A;">
+                            <span style="color: #6B7A99; font-size: 11px; text-transform: uppercase;">Requested Date</span><br>
+                            <span style="font-weight: 600;">{{date}} @ {{time}}</span>
+                        </td>
+                        <td style="border-bottom: 1px solid #1E2A3A; text-align: right;">
+                            <span style="color: #6B7A99; font-size: 11px; text-transform: uppercase;">Duration</span><br>
+                            <span style="font-weight: 600;">{{duration}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="color: #6B7A99; font-size: 11px; text-transform: uppercase;">Lead Source</span><br>
+                            <span style="font-weight: 600;">{{source}}</span>
+                        </td>
+                        <td style="text-align: right;">
+                            <span style="color: #6B7A99; font-size: 11px; text-transform: uppercase;">Est. Total</span><br>
+                            <span style="color: #00D68F; font-weight: 800; font-size: 18px;">{{estimated_total}}</span>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Admin Actions -->
+                <div style="margin-top: 35px; text-align: center;">
+                    <a href="mailto:{{client_email}}?subject=Re: Dream Space Booking {{booking_ref}}" style="background-color: #1E2A3A; color: #ffffff; padding: 12px 20px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; margin-right: 10px;">Reply via Email</a>
+                    <a href="https://wa.me/{{client_phone}}" style="background-color: #25D366; color: #ffffff; padding: 12px 20px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">WhatsApp Client</a>
+                </div>
+            </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+            <td style="padding: 20px; background-color: #080C14; text-align: center; color: #4B5563; font-size: 11px;">
+                Dream Space Internal Alert System • Generated from booking flow portal.
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

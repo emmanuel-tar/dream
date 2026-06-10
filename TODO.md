@@ -1,9 +1,18 @@
-# TODO — T Square Hub Booking Flow
+# TODO — T SQUARED HUB / Dream Space site
 
-- [x] Update `index.html` “Get Started/Book” CTA(s) to route to `booking.html` with query params.
-- [x] Ensure `booking.html` reads the `service` query param.
-- [x] Professional booking confirmation screen in `booking.html`.
-- [x] EmailJS integration for `booking.html` (Dual notification).
-- [x] EmailJS integration for main contact form on `index.html`.
-- [x] Add a "Project Gallery" with actual project photos to build trust. 
-- [x] Implement client-side photo upload for site surveys in the booking flow. 
+- [ ] Fix booking flow JavaScript issues (notably Step 3 validation bug and any missing element IDs like sidebar summary rows).
+- [ ] Harden EmailJS integration:
+  - [ ] Correctly gate on EMAILJS_CONFIGURED and prevent runtime errors when templates/service ID are missing.
+  - [ ] Ensure contact form uses proper template/service IDs or clean fallback.
+  - [ ] Improve booking email sending status UI.
+- [ ] UX polish for booking SPA:
+  - [ ] Ensure all “Next” buttons enable/disable consistently based on step completion.
+  - [ ] Validate calendar/time selection flows and make “availability dots/slots” consistent.
+  - [ ] Improve panel transitions and reset logic.
+- [ ] Cleanup performance/quality:
+  - [ ] Remove duplicated CSS blocks for booking system integration.
+  - [ ] Remove duplicated/unused JS sections and add small safety guards.
+- [ ] Decide whether to split into a separate `booking.html`.
+  - [ ] If keeping SPA, ensure CTA buttons behave consistently.
+  - [ ] If splitting, create `booking.html` and move booking flow assets accordingly.
+

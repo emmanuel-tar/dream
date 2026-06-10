@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="booking-ux.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💡</text></svg>">
 <!-- EmailJS SDK (defer loading to prevent blocking rendering) -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
 <!-- Vercel Analytics -->
@@ -17,6 +19,15 @@
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
+
+<!-- PAGE LOADER -->
+<div id="loader">
+  <div class="loader-logo">Dream<span>Space</span></div>
+  <div class="loader-bar">
+    <div class="loader-fill"></div>
+  </div>
+</div>
+
 <!-- EMAILJS SETUP NOTICE -->
 <div id="setup-notice" style="display:none;">
   <span>⚙️</span>
@@ -57,7 +68,7 @@
 </div>
 
 <!-- SPA CONTENT WRAPPER (Initially visible) -->
-<div id="landing-page" style="display:block;">
+<div id="landing-page" style="display:block;" aria-hidden="true">
 
 <!-- PROGRESS BAR -->
 <div id="progress-bar"></div>
@@ -563,31 +574,32 @@
 <!-- BOOKING SPA FLOW (Hidden by default) -->
 <div id="booking-flow" style="display:none;">
   <div class="booking-page">
-    <aside class="sidebar">
-      <a href="javascript:void(0)" onclick="hideBooking()" class="sidebar-logo">
-        <div class="logo-mark">💡</div><div class="logo-text">Dream<span>Space</span></div>
-      </a>
-      <div><div class="sidebar-heading">Book a <em>Service</em></div></div>
-      <nav class="steps-nav" id="stepsNav">
-        <div class="step-item active" data-step="1" onclick="jumpTo(1)"><div class="step-circle" id="sc1">1</div><div><div class="step-label">Service</div><div class="step-sub">Choose what you need</div></div></div>
-        <div class="step-connector" id="conn1"></div>
-        <div class="step-item" data-step="2" onclick="jumpTo(2)"><div class="step-circle" id="sc2">2</div><div><div class="step-label">Date &amp; Time</div><div class="step-sub">Pick your slot</div></div></div>
-        <div class="step-connector" id="conn2"></div>
-        <div class="step-item" data-step="3" onclick="jumpTo(3)"><div class="step-circle" id="sc3">3</div><div><div class="step-label">Your Details</div><div class="step-sub">Contact info</div></div></div>
-        <div class="step-connector" id="conn3"></div>
-        <div class="step-item" data-step="4" onclick="jumpTo(4)"><div class="step-circle" id="sc4">4</div><div><div class="step-label">Review</div><div class="step-sub">Confirm booking</div></div></div>
-        <div class="step-connector" id="conn4"></div>
-        <div class="step-item" data-step="5"><div class="step-circle" id="sc5">5</div><div><div class="step-label">Confirmed</div><div class="step-sub">You're booked!</div></div></div>
-      </nav>
-      <div class="booking-summary" id="bookingSummary" style="display:none">
-        <div class="summary-title">Summary</div>
-        <div class="summary-row" id="sum-service"><span class="summary-key">Service</span><span id="sum-svc-val" class="summary-val">—</span></div>
-        <div class="summary-row" id="sum-date"><span class="summary-key">Date</span><span id="sum-date-val" class="summary-val">—</span></div>
+    <header class="booking-header">
+      <div class="booking-header-top">
+        <a href="javascript:void(0)" onclick="hideBooking()" class="sidebar-logo">
+          <div class="logo-mark">💡</div><div class="logo-text">Dream<span>Space</span></div>
+        </a>
+        <button class="btn-exit" onclick="hideBooking()">✕ Close</button>
       </div>
-      <button class="btn-ghost" onclick="hideBooking()" style="margin-top:auto">← Back to Home</button>
-    </aside>
+      <nav class="steps-nav-horizontal" id="stepsNav">
+        <div class="step-item" data-step="1" onclick="jumpTo(1)"><div class="step-circle" id="sc1">1</div><span class="step-label">Service</span></div>
+        <div class="step-line" id="conn1"></div>
+        <div class="step-item" data-step="2" onclick="jumpTo(2)"><div class="step-circle" id="sc2">2</div><span class="step-label">Schedule</span></div>
+        <div class="step-line" id="conn2"></div>
+        <div class="step-item" data-step="3" onclick="jumpTo(3)"><div class="step-circle" id="sc3">3</div><span class="step-label">Details</span></div>
+        <div class="step-line" id="conn3"></div>
+        <div class="step-item" data-step="4" onclick="jumpTo(4)"><div class="step-circle" id="sc4">4</div><span class="step-label">Review</span></div>
+        <div class="step-line" id="conn4"></div>
+        <div class="step-item" data-step="5"><div class="step-circle" id="sc5">5</div><span class="step-label">Done</span></div>
+      </nav>
+    </header>
 
     <main class="booking-main">
+      <div class="compact-summary" id="bookingSummary" style="display:none">
+        <div class="summary-item" id="sum-service"><span class="sum-tag">Service:</span><span id="sum-service-val" class="sum-val">—</span></div>
+        <div class="summary-item" id="sum-date"><span class="sum-tag">Schedule:</span><span id="sum-date-val" class="sum-val">—</span></div>
+      </div>
+
       <!-- Panel 1 -->
       <div class="step-panel active" id="panel1">
         <div class="panel-header">

@@ -1,3 +1,10 @@
+/* ─── PRODUCTION BOOTSTRAP ─── */
+window.addEventListener('load', () => {
+  const loader = document.getElementById('loader');
+  if (loader) loader.classList.add('hidden');
+  initializeSlider();
+});
+
 /* ─── GLOBAL SCROLL HANDLER (Optimized) ─── */
 let scrollTicking = false;
 const progressBar = document.getElementById('progress-bar');
@@ -65,7 +72,7 @@ const sharedObserver = new IntersectionObserver((entries) => {
     // Scroll Spy logic
     if (entry.isIntersecting) {
       navLinks.forEach(a => {
-        a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
+        if (entry.target.id) a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
       });
     }
     // Counter logic
@@ -169,6 +176,7 @@ function validateContactForm(id, errId, check) {
   if (err) err.classList.toggle('show', !ok);
   return ok;
 }
+
 function handleSubmit() {
   const v1 = validateContactForm('fname', 'err-fname', v => v.length > 0);
   const v2 = validateContactForm('email', 'err-email', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
@@ -199,10 +207,10 @@ function handleSubmit() {
       from_company: company,
       service_requested: service,
       message: message,
-      to_email: 'emmanuel.tar@outlook.com' // Your company email
+      to_email: 'emmanuel.tar@outlook.com'
     };
 
-    emailjs.send(EMAILJS_SERVICE_ID, 'contact_form_template', templateParams) // Assuming you'll create a 'contact_form_template'
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CONTACT, templateParams)
       .then((response) => {
         console.log('Contact form email sent successfully!', response.status, response.text);
         const formBody = document.getElementById('formBody');
@@ -272,11 +280,12 @@ window.acceptCookie = acceptCookie; // Make globally accessible for inline oncli
    up your EmailJS account (see guide)
 ══════════════════════════════════════ */
 const EMAILJS_PUBLIC_KEY = 'ynAKx0CuhnGcuNjz-';        // From EmailJS → Account → API Keys
-const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';        // From EmailJS → Email Services
+const EMAILJS_SERVICE_ID = 'service_default';         // Updated placeholder
 const EMAILJS_TEMPLATE_COMPANY = 'ds_company_alert';    // Template for T Square Hub notification
 const EMAILJS_TEMPLATE_CUSTOMER = 'ds_customer_confirm'; // Template for customer confirmation
+const EMAILJS_TEMPLATE_CONTACT = 'contact_form_template'; // Added for contact form consistency
 
-const EMAILJS_CONFIGURED = EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY';
+const EMAILJS_CONFIGURED = (EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY' && EMAILJS_SERVICE_ID !== 'YOUR_SERVICE_ID');
 
 // Initialize EmailJS
 function initializeEmailJS() {
@@ -531,11 +540,18 @@ window.removePhoto = removePhoto; // Make globally accessible
 function showBooking(svcName) {
   const landingPage = document.getElementById('landing-page');
   const bookingFlow = document.getElementById('booking-flow');
+
+  // Prevent “background scattering” by freezing the landing page layout
+  // and locking body scroll while booking flow is open.
+  document.body.classList.add('ds-booking-open');
+
   if (landingPage) landingPage.style.display = 'none';
   if (bookingFlow) bookingFlow.style.display = 'block';
-  document.body.style.overflow = 'auto'; // Allow scrolling for the booking view
+
+  // Force top and avoid parallax/scroll side-effects.
   window.scrollTo({ top: 0 });
   initCal();
+
 
   // Load state and set step to ensure continuity
   loadState();
@@ -558,6 +574,7 @@ function hideBooking() {
   const confirmAbandon = confirm("Are you sure you want to leave the booking process? Your progress will be lost.");
 
   if (confirmAbandon) {
+    document.body.classList.remove('ds-booking-open');
     const landingPage = document.getElementById('landing-page');
     const bookingFlow = document.getElementById('booking-flow');
     if (landingPage) landingPage.style.display = 'block';
@@ -565,14 +582,12 @@ function hideBooking() {
     document.body.style.overflow = ''; // Restore scrolling
     window.scrollTo({ top: 0 });
 
+
     // Track when the user abandons the booking flow
     if (window.va) {
       window.va('event', { name: 'booking_abandoned', data: { current_step: state.step, service: state.service } });
     }
-    // Clear booking state on abandonment
-    localStorage.removeItem('ds_booking_progress');
-    // Optionally, reset the booking flow to step 1
-    Object.assign(state, { step: 1, service: null, servicePrice: 0, priority: 'Normal', priorityMult: 1, date: null, dateLabel: null, time: null, duration: '1 hour', fname: '', lname: '', email: '', phone: '', photos: [], company: '', location: '', desc: '', source: '', contactPref: 'Phone Call' });
+    newBooking(false); // Silent reset
   }
 }
 window.hideBooking = hideBooking; // Make globally accessible
@@ -654,7 +669,7 @@ function validateStep3() {
     const el = document.getElementById(`d_${key}`);
     const err = document.getElementById(`e_${key}`);
     // Corrected: Access validationRules as a function and pass el.value
-    const valid = el ? validationRuleskey : false;
+    const valid = el ? validationRules[key](el.value.trim()) : false;
 
     if (el) el.classList.toggle('err', !valid);
     if (err) err.classList.toggle('show', !valid);
@@ -754,7 +769,8 @@ async function confirmBooking() {
     time: state.time,
     duration: state.duration,
     location: state.location,
-    description: state.desc + (state.photos.length > 0 ? `\n\n[Client has attached ${state.photos.length} survey photo(s)]` : ''),
+    description: state.desc,
+    photo_count: state.photos.length || 0,
     source: state.source || 'Not specified',
     contact_pref: state.contactPref,
     estimated_fee: fmt(base),
@@ -852,9 +868,25 @@ async function confirmBooking() {
 }
 window.confirmBooking = confirmBooking; // Make globally accessible
 
-function newBooking() {
+function newBooking(reload = true) {
   localStorage.removeItem('ds_booking_progress');
-  location.reload(); // Simple reload to reset everything
+  if (reload) {
+    location.reload();
+  } else {
+    // Manual Reset
+    Object.assign(state, { 
+      step: 1, service: null, servicePrice: 0, priority: 'Normal', priorityMult: 1, 
+      date: null, dateLabel: null, time: null, photos: [] 
+    });
+    document.querySelectorAll('.service-option, .priority-opt, .time-slot, .cal-day').forEach(el => el.classList.remove('selected'));
+    document.querySelectorAll('input, textarea').forEach(el => el.value = '');
+    const container = document.getElementById('photoPreviewContainer');
+    if (container) container.innerHTML = '<label>...</label>'; // Re-add the upload button
+    setStep(1);
+    document.body.classList.remove('ds-booking-open');
+    document.getElementById('landing-page').style.display = 'block';
+    document.getElementById('booking-flow').style.display = 'none';
+  }
 }
 window.newBooking = newBooking; // Make globally accessible
 
@@ -873,12 +905,12 @@ function updateSummary() {
     if (valueEl && val) valueEl.textContent = val;
   };
 
-  showSummaryItem('service', state.service);
+  showSummaryItem('service-val', state.service);
   showSummaryItem('priority', state.priority !== 'Normal' ? state.priority : null);
   const sumDiv1 = document.getElementById('sum-div1');
   if (sumDiv1) sumDiv1.style.display = (state.date || state.time) ? '' : 'none';
-  showSummaryItem('date', state.dateLabel);
-  showSummaryItem('time', state.time);
+  showSummaryItem('date-val', state.dateLabel);
+  showSummaryItem('time-val', state.time);
   const sumDiv2 = document.getElementById('sum-div2');
   if (sumDiv2) sumDiv2.style.display = state.fname ? '' : 'none';
   showSummaryItem('name', state.fname ? state.fname + ' ' + state.lname : null);
